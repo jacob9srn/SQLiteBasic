@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    //깃허브 반영
     static final String TAG = "메인 액티비티";
 
     private ArrayList<MemoData> arrayList;
