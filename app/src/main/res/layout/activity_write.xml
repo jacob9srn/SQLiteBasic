@@ -1,44 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-   >
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:hint="제목"
-        android:layout_weight="6"
-        >    </EditText>
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="저장"
-        android:layout_weight="2"
-        >
-    </Button>
-    <Button
-        android:id="@+id/btn_cancle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="취소"
-        android:layout_weight="2"
-        >
-    </Button>
-</LinearLayout>
+        android:orientation="horizontal">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="6"
+                android:hint="제목"
+                android:maxLines="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></EditText>
+
+            <Button
+                android:id="@+id/btn_photoRegister"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="2"
+                android:text="사진 등록"
+                app:layout_constraintEnd_toStartOf="@+id/btn_save"
+                app:layout_constraintTop_toBottomOf="@+id/et_title"></Button>
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="2"
+                android:text="저장"
+                app:layout_constraintEnd_toStartOf="@+id/btn_cancle"
+                app:layout_constraintTop_toBottomOf="@+id/et_title"></Button>
+
+            <Button
+                android:id="@+id/btn_cancle"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="2"
+                android:text="취소"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_title"></Button>
+            >
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/write_iv_first"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
         android:id="@+id/et_contents"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elegantTextHeight="true"
         android:hint="내용" />
 
 

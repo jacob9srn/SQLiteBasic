@@ -2,7 +2,11 @@ package com.example.sqlitebasic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +18,14 @@ public class ReadItemActivity  extends AppCompatActivity {
     private TextView readItem_title;
     private TextView readItem_content;
 
+    private Button readItem_btn_modify;
+    private Button readItem_btn_delete;
+
+    public MemoDbHelper memoDbHelper;
+
+    private static final int RESULT_CODE_DEALETE = 2000;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,15 +33,37 @@ public class ReadItemActivity  extends AppCompatActivity {
 
         readItem_title = (TextView)findViewById(R.id.tv_readItem_title);
         readItem_content = (TextView) findViewById(R.id.tv_readItem_contents);
+        readItem_btn_delete = (Button) findViewById(R.id.btn_readItem_delete);
+
+
+        memoDbHelper = MemoDbHelper.getInstance(this);
 
             Bundle extras = getIntent().getExtras();
 
+            final int read_id = extras.getInt("id");
+            Log.d("리드 액티비티", String.valueOf(read_id));
             String read_title = extras.getString("title");
         String read_contents = extras.getString("contents");
+            final int position = extras.getInt("position");
         readItem_title.setText(read_title);
         readItem_content.setText(read_contents);
 
+        readItem_btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+                memoDbHelper.delete(read_id);
+
+                Toast.makeText(ReadItemActivity.this, read_id+"삭제", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("read_id",read_id);
+                intent.putExtra("position",position);
+                setResult(RESULT_CODE_DEALETE,intent);
+                finish();
+
+            }
+        });
 
 
     }

@@ -4,68 +4,146 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class WriteActivity extends AppCompatActivity {
 
+    private static final int PICK_IMAGE= 1000;
+
     private EditText mTitleEditText;
     private EditText mContentsEditText;
 
+    private ImageView mImageView;
+
+    private Button btn_photoRegister;
     private Button btn_save;
     private Button btn_cancle;
+    public MemoDbHelper memoDbHelper;
 
+    public Bitmap bitImg;
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE){
+            if(resultCode == RESULT_OK){
+                try {
+                    InputStream in = getContentResolver().openInputStream(data.getData());
+                    bitImg = BitmapFactory.decodeStream(in);
+                    in.close();
+                    mImageView.setImageBitmap(bitImg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
 
-
         mContentsEditText = findViewById(R.id.et_contents);
         mTitleEditText = findViewById(R.id.et_title);
 
 
-        btn_save = findViewById(R.id.btn_save);
+        memoDbHelper = MemoDbHelper.getInstance(this);
 
-        btn_save.setOnClickListener(new View.OnClickListener() {
+
+        btn_photoRegister = findViewById(R.id.btn_photoRegister);
+        btn_save = findViewById(R.id.btn_save);
+//갤러리에 접근 하기
+        mImageView = findViewById(R.id.write_iv_first);
+
+        btn_photoRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             String title =mTitleEditText.getText().toString();
-              String contents = mContentsEditText.getText().toString();
+                mImageView.setVisibility(View.VISIBLE);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent,PICK_IMAGE);
+            }
+        });
 
-                ContentValues contentValues = new ContentValues();  // DB에 정보를 넘겨주는 것.
-                contentValues.put(Contract.MemoEntry.COLUMN_NAME_TITLE, title);
-                contentValues.put(Contract.MemoEntry.COLUMN_NAME_CONTENTS, contents);
 
-                SQLiteDatabase db = MemoDbHelper.getInstance(WriteActivity.super.getApplicationContext()).getWritableDatabase(); // DB에 삽입하기 전에 객체를 먼저 얻어 놓는다.
 
-                long newRowId = db.insert(Contract.MemoEntry.TABLE_NAME,null,contentValues); // 위에서 설정한 contentValues를 이용한다.
 
-                if(newRowId==-1){
-                    Toast.makeText(WriteActivity.super.getApplicationContext(), "저장 실패!", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(WriteActivity.super.getApplicationContext(), "저장에 성공했습니다.", Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK);
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
 
-                }
+                    btn_save.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            String title = mTitleEditText.getText().toString();
+                            String contents = mContentsEditText.getText().toString();
+                            //임시
 
-                finish(); }
+                            memoDbHelper.insert(title,contents);
 
-            });
+                            return false;
+                        }
+                    });
+
+                    btn_save.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        String title = mTitleEditText.getText().toString();
+                                                        String contents = mContentsEditText.getText().toString();
+                                                            // 비트맵 이미지를 바이트 타입으로 저장. SQLite가 이미지를 이런식으로 저장하기 때문.
+                                                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                                        if(bitImg==null){
+
+                                                        }else{
+                                                            bitImg.compress(Bitmap.CompressFormat.PNG,100,stream);
+                                                            byte[] data = stream.toByteArray();
+                                                        }
+
+
+                                                        ContentValues contentValues = new ContentValues();  // DB에 정보를 넘겨주는 것.
+                                                        contentValues.put(Contract.MemoEntry.COLUMN_NAME_TITLE, title);
+                                                        contentValues.put(Contract.MemoEntry.COLUMN_NAME_CONTENTS, contents);
+
+
+                                                        SQLiteDatabase db = MemoDbHelper.getInstance(WriteActivity.super.getApplicationContext()).getWritableDatabase(); // DB에 삽입하기 전에 객체를 먼저 얻어 놓는다.
+
+                                                        long newRowId = db.insert(Contract.MemoEntry.TABLE_NAME, null, contentValues); // 위에서 설정한 contentValues를 이용한다.
+
+                                                        if (newRowId == -1) {
+                                                            Toast.makeText(WriteActivity.super.getApplicationContext(), "저장 실패!", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(WriteActivity.super.getApplicationContext(), "저장에 성공했습니다.", Toast.LENGTH_SHORT).show();
+                                                            setResult(RESULT_OK);
+                                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                                                        }
+
+                                                        finish();
+                                                    }
+
+                        });
+
 
         btn_cancle = findViewById(R.id.btn_cancle);
         btn_cancle.setOnClickListener(new View.OnClickListener() {

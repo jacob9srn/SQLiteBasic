@@ -13,8 +13,7 @@ public final class Contract { // 개념이므로 상속을 금지하기 위해 �
         public static final String TABLE_NAME = "memo";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_CONTENTS = "contents";
-
-
+        public static final String COLUM_NAME_IMAGE = "image";
     }
 
 

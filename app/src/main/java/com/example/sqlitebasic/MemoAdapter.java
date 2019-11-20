@@ -18,19 +18,18 @@ import java.util.ArrayList;
 
 public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHolder> {
 
+
     static final String TAG = "메인어뎁터";
 
     private ArrayList<MemoData> arrayList;
     public Context context;
-    //public SQLiteDatabase db;
-   // public MemoDbHelper dbHelper;
+    public MemoDbHelper memoDbHelper;
 
-    public MemoAdapter(Context context, ArrayList<MemoData> arrayList, SQLiteDatabase db) {
+    public MemoAdapter(Context context, ArrayList<MemoData> arrayList) {
         this.arrayList = arrayList;
         this.context = context;
-        //this.db = db;
-        Log.i(TAG,"MainAdapter(ArrayList<MemoData>) and ??arrayList.get(0).getitem_title?? : ");
 
+        Log.i(TAG,"MainAdapter(ArrayList<MemoData>) and ??arrayList.get(0).getitem_title?? : ");
     }
 
     @NonNull
@@ -92,7 +91,8 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHold
 
         public void remove(int position){
           try{
-
+              memoDbHelper = MemoDbHelper.getInstance(context);
+              memoDbHelper.delete(position);
             arrayList.remove(position);
             notifyItemRemoved(position); // 노티파이는 새로고침
 
@@ -102,7 +102,7 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHold
     }
 
   // 커스텀 리스너 만들기
-    public interface OnItemClickListener{ // 어뎁터 내에서 커스텀 리스너 인터페이스를 정의.
+    public interface OnItemClickListener{ // 어뎁터 내에서 커스텀 리스너 인터페이스를 정의. 질문해야겠다.
         void onItemClick(View v, int position);
     }
 
@@ -118,8 +118,6 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHold
 
 
     public class CustomViewHolder extends RecyclerView.ViewHolder{ // 내부클래스 이게 첫번째 같은데
-
-
         protected TextView item_title;
         protected TextView item_contents;
         public CustomViewHolder(@NonNull View itemView) {
