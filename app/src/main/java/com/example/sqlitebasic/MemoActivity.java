@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 
 public class MemoActivity extends AppCompatActivity {
@@ -59,6 +60,9 @@ public class MemoActivity extends AppCompatActivity {
 
         dbHelper = MemoDbHelper.getInstance(this);
         db = dbHelper.getReadableDatabase();
+
+       //db.execSQL("drop table "+Contract.MemoEntry.TABLE_NAME);
+
         cursor = db.rawQuery("SELECT * FROM " + Contract.MemoEntry.TABLE_NAME, null);
 
         // 어뎁터뷰 생성
@@ -72,9 +76,10 @@ public class MemoActivity extends AppCompatActivity {
         Log.i(TAG, "Before if(cursor.moveToFirst())");
         if (cursor.moveToFirst()) {
             int item_id = cursor.getInt(0);
+
             String item_title = cursor.getString(1);
             String item_contents = cursor.getString(2);
-            MemoData memoData = new MemoData(item_title, item_contents, item_id);
+            MemoData memoData = new MemoData(item_title, item_contents, item_id, null);
             arrayList.add(memoData);
         }
         while (cursor.moveToNext()) {
@@ -82,7 +87,7 @@ public class MemoActivity extends AppCompatActivity {
             int item_id = cursor.getInt(0);
             String item_title = cursor.getString(1);
             String item_contents = cursor.getString(2);
-            MemoData memoData = new MemoData(item_title, item_contents, item_id);
+            MemoData memoData = new MemoData(item_title, item_contents, item_id,null);
             arrayList.add(memoData);
 
         }
@@ -102,13 +107,14 @@ public class MemoActivity extends AppCompatActivity {
                 intent.putExtra("contents", arrayList.get(position).getItem_contens());
                 intent.putExtra("position",position);
                 startActivityForResult(intent,REQUEST_CODE_READ);
+                finish();
             }
         });
 
         memoAdapter.notifyDataSetChanged();
 
         //테이블삭제
-
+            //db.execSQL("drop table "+Contract.MemoEntry.TABLE_NAME);
 
     }
 
@@ -124,8 +130,8 @@ public class MemoActivity extends AppCompatActivity {
             int item_id = cursor.getInt(0);
             String item_title = cursor.getString(1);
             String item_contents = cursor.getString(2);
-            MemoData memoData = new MemoData(item_title, item_contents, item_id);  // 이것 때문에 글쓰고 나서 id값이 자꾸 null(0)이 나왔다. 그럼 어딘가에서 id값이 안들어갔다는 것을 유추 했어야 했다.
-            // .. 왜 오류가 안났지?????????????????????????????????????????????????????????????????????????????????? 생성자의 인자 갯수가 다른데..
+            MemoData memoData = new MemoData(item_title, item_contents, item_id,null);  // 이것 때문에 글쓰고 나서 id값이 자꾸 null(0)이 나왔다. 그럼 어딘가에서 id값이 안들어갔다는 것을 유추 했어야 했다.
+            // .. 왜 오류가 안났지?????????????????????????????????????????????????????????????????????????????????? 생성자의 인자 갯수가 다른데.. 생성자가 여러개 였다ㅣ
             arrayList.add(memoData);
             Log.i(TAG, "Before memoAdapter.notifyDataSetChanged()");
             memoAdapter.notifyDataSetChanged();
@@ -133,7 +139,7 @@ public class MemoActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_INSERT && resultCode == RESULT_CANCELED) {
 
         }
-        if (requestCode == REQUEST_CODE_READ && resultCode == 2000) {
+        if (requestCode == REQUEST_CODE_READ && resultCode == 2000) { // 2000 은 DELETE코드
             Log.i(TAG, "in onActivityResult DELETE");
             int position = data.getIntExtra("position", 0);
             Toast.makeText(this, position+ "포지션 삭제 했습니다. 2000", Toast.LENGTH_SHORT).show();
@@ -147,7 +153,16 @@ public class MemoActivity extends AppCompatActivity {
                memoAdapter.notifyItemRangeChanged(position,arrayList.size());
 
            }          // 어레이 리스트에서 몇번째를 삭제할까? id값으로 삭제해선 안된다. 몇번째 인지 만이 중요하다.
-       }
+
+        if (requestCode == 2001 && resultCode == 2002) { // 2001Modify 2002는 RESULT_OK_Modify_코드
+            Log.i(TAG, "in onActivityResult Modify");
+
+            int position = data.getIntExtra("position",0);
+            memoAdapter.notifyItemChanged(position);
+
+        }
+
+    }
 
     }
 

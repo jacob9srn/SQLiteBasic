@@ -24,7 +24,7 @@ public class ReadItemActivity  extends AppCompatActivity {
     public MemoDbHelper memoDbHelper;
 
     private static final int RESULT_CODE_DEALETE = 2000;
-
+    private static final int RESULT_CODE_MODIFY = 2001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,8 @@ public class ReadItemActivity  extends AppCompatActivity {
         readItem_content = (TextView) findViewById(R.id.tv_readItem_contents);
         readItem_btn_delete = (Button) findViewById(R.id.btn_readItem_delete);
 
+        readItem_btn_modify = (Button) findViewById(R.id.btn_readItem_modification);
+
 
         memoDbHelper = MemoDbHelper.getInstance(this);
 
@@ -42,8 +44,8 @@ public class ReadItemActivity  extends AppCompatActivity {
 
             final int read_id = extras.getInt("id");
             Log.d("리드 액티비티", String.valueOf(read_id));
-            String read_title = extras.getString("title");
-        String read_contents = extras.getString("contents");
+            final String read_title = extras.getString("title");
+        final String read_contents = extras.getString("contents");
             final int position = extras.getInt("position");
         readItem_title.setText(read_title);
         readItem_content.setText(read_contents);
@@ -51,20 +53,29 @@ public class ReadItemActivity  extends AppCompatActivity {
         readItem_btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 memoDbHelper.delete(read_id);
-
                 Toast.makeText(ReadItemActivity.this, read_id+"삭제", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 intent.putExtra("read_id",read_id);
                 intent.putExtra("position",position);
                 setResult(RESULT_CODE_DEALETE,intent);
                 finish();
-
             }
         });
 
+        readItem_btn_modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),ModifyActivity.class);
+                intent.putExtra("read_id", read_id);
+                intent.putExtra("read_title", read_title);
+                intent.putExtra("read_contents", read_contents);
+                intent.putExtra("read_position",position);
+                setResult(RESULT_CODE_MODIFY,intent);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 }

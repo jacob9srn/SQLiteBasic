@@ -21,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         imageView = (ImageView) findViewById(R.id.main_iv_first);
 
         Glide.with(this).load("http://wtimg.webtooninsight.co.kr/webtoonthumbnail/wi_131405132336691626.jpg").into(imageView);

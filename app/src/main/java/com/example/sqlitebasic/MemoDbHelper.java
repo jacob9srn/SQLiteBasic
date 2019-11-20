@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.nfc.Tag;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 public class MemoDbHelper extends SQLiteOpenHelper {
@@ -12,34 +13,40 @@ public class MemoDbHelper extends SQLiteOpenHelper {
 
     private static MemoDbHelper sInstance;
     private static final int DB_VERSION = 1; // 스키마 변경시 숫자를 올린다.
-    private static final String DB_NAME = "Memo.db";// db이름
+    private static final String DB_NAME = "memo.db";// db이름
 
     // 테이블 생성 SQL문
     public static final String SQL_CREATE_TBL = "CREATE TABLE IF NOT EXISTS " + Contract.MemoEntry.TABLE_NAME + " " +
             "(" +
-            Contract.MemoEntry._ID +        " INTEGER NOT NULL" +   ", " + // _ID = (_id) 자세히 보면 보여
-            Contract.MemoEntry.COLUMN_NAME_TITLE +      " TEXT"             +   ", " +
-            Contract.MemoEntry.COLUMN_NAME_CONTENTS +     " TEXT"             +
-
-            ")" ;
+            BaseColumns._ID +        " INTEGER PRIMARY KEY " +   ", " + // _ID = (_id) 자세히 보면 보여
+            Contract.MemoEntry.COLUMN_NAME_TITLE +      " TEXT "             +   ", " +
+            Contract.MemoEntry.COLUMN_NAME_CONTENTS +     " TEXT "            + ", "+
+            Contract.MemoEntry.COLUMN_NAME_IMAGE +         " TEXT " +
+            ");" ;
 
 //
 
 
-    public void insert(String title , String content){
+    public void insert(String title , String content, String image){ // 이미지 어떻게 넣지
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("INSERT INTO "+Contract.MemoEntry.TABLE_NAME+" ("+Contract.MemoEntry.COLUMN_NAME_TITLE+", "+Contract.MemoEntry.COLUMN_NAME_CONTENTS+
-                ") VALUES ('" +title+"', '"+content+"');");
+                ") VALUES ('" +title+"', '"+content+"', '"+image+"');");
         db.close();
     }
+
 
         public void delete(int item_id){
         SQLiteDatabase db = getWritableDatabase();
           db.execSQL("delete from "+Contract.MemoEntry.TABLE_NAME+" where _id = "+item_id);
 
        }
-
-
+        public void modify(int item_id , String item_title , String item_content){
+            SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("UPDATE "+Contract.MemoEntry.TABLE_NAME+" SET '"+
+                Contract.MemoEntry.COLUMN_NAME_TITLE+"='"+item_title+"', '"+
+                Contract.MemoEntry.COLUMN_NAME_CONTENTS+"='"+item_content+"' where _id = "
+                +item_id);
+    }
 
 
     // 테이블 삭제 SQL문
@@ -79,29 +86,30 @@ public class MemoDbHelper extends SQLiteOpenHelper {
                 "            Contract.MemoEntry.TABLE_NAME,\n" +
                 "    Contract.MemoEntry._ID,\n" +
                 "    Contract.MemoEntry.COLUMN_NAME_TITLE,\n" +
-                "    Contract.MemoEntry.COLUMN_NAME_CONTENTS);)");
+                "    Contract.MemoEntry.COLUMN_NAME_CONTENTS,\n" +
+                "    Contract.MemoEntry.COL);)");
         db.execSQL( SQL_CREATE_TBL);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //DB스키마가 변경될 때 여기서 데이터르 백업하고, 테이블 삭제 후 재생성 및 데이터 복원등을 한다.
-//        Log.i(TAG,"START onUpgrage and Before db.exesSQL(\"DROP TABLE IF EXISTS \" + Contract.MemoEntry.TABLE_NAME;)");
-//        db.execSQL(SQL_DELETE_ENTRIES);
-//        Log.i(TAG,"In onUpgrage and Before onCreate(db)");
-//        onCreate(db);
 
-        switch (oldVersion) {
-            case 1:
-                try {
-                    db.beginTransaction();
-                    db.execSQL("ALTER TABLE " + Contract.MemoEntry.TABLE_NAME + " ADD COLUMN " + Contract.MemoEntry.COLUM_NAME_IMAGE);
-                    db.setTransactionSuccessful();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    db.endTransaction();
-                };break;
-        }
+        //db.execSQL(SQL_DELETE_ENTRIES);
+        //Log.i(TAG,"In onUpgrage and Before onCreate(db)");
+        //onCreate(db);
+
+//        switch (oldVersion) {
+//            case 2:
+//                try {
+//                    db.beginTransaction();
+//                    db.execSQL("ALTER TABLE " + Contract.MemoEntry.TABLE_NAME + " ADD COLUMN " + Contract.MemoEntry.COLUM_NAME_IMAGE);
+//                    db.setTransactionSuccessful();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    db.endTransaction();
+//                };break;
+//        }
             }
 
     }

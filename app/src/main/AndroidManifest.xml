@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".MemoActivity">
         </activity>
+        <activity android:name=".ModifyActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -23,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.util.ArrayList;
 
 public class WriteActivity extends AppCompatActivity {
@@ -100,7 +101,7 @@ public class WriteActivity extends AppCompatActivity {
                             String contents = mContentsEditText.getText().toString();
                             //임시
 
-                            memoDbHelper.insert(title,contents);
+                            memoDbHelper.insert(title,contents,null);
 
                             return false;
                         }
@@ -112,20 +113,21 @@ public class WriteActivity extends AppCompatActivity {
                                                         String title = mTitleEditText.getText().toString();
                                                         String contents = mContentsEditText.getText().toString();
                                                             // 비트맵 이미지를 바이트 타입으로 저장. SQLite가 이미지를 이런식으로 저장하기 때문.
+                                                        ContentValues contentValues = new ContentValues();  // DB에 정보를 넘겨주는 것.
                                                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                                         if(bitImg==null){
 
                                                         }else{
                                                             bitImg.compress(Bitmap.CompressFormat.PNG,100,stream);
                                                             byte[] data = stream.toByteArray();
+
+
+                                                            contentValues.put(Contract.MemoEntry.COLUMN_NAME_IMAGE, data);
                                                         }
 
-
-                                                        ContentValues contentValues = new ContentValues();  // DB에 정보를 넘겨주는 것.
                                                         contentValues.put(Contract.MemoEntry.COLUMN_NAME_TITLE, title);
                                                         contentValues.put(Contract.MemoEntry.COLUMN_NAME_CONTENTS, contents);
-
-
+                                                        contentValues.put(Contract.MemoEntry.COLUMN_NAME_IMAGE, title);// 이미지 어떻게 넣지.
                                                         SQLiteDatabase db = MemoDbHelper.getInstance(WriteActivity.super.getApplicationContext()).getWritableDatabase(); // DB에 삽입하기 전에 객체를 먼저 얻어 놓는다.
 
                                                         long newRowId = db.insert(Contract.MemoEntry.TABLE_NAME, null, contentValues); // 위에서 설정한 contentValues를 이용한다.
@@ -205,7 +207,7 @@ public class WriteActivity extends AppCompatActivity {
                         contentValues.put(Contract.MemoEntry.COLUMN_NAME_CONTENTS, contents1);
 
                         SQLiteDatabase db = MemoDbHelper.getInstance(WriteActivity.super.getApplicationContext()).getWritableDatabase(); // DB에 삽입하기 전에 객체를 먼저 얻어 놓는다.
-
+                        //contentValues.put("_id",1); primary key 설정을 안해줬다 dbhelper에서 !!
                         long newRowId = db.insert(Contract.MemoEntry.TABLE_NAME, null, contentValues); // 위에서 설정한 contentValues를 이용한다.
 
                         if (newRowId == -1) {
