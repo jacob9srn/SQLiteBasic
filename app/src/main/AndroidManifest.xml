@@ -35,6 +35,10 @@
         </activity>
         <activity android:name=".ModifyActivity">
         </activity>
+        <activity android:name=".GreatManActivity" />
+        <activity android:name=".GreatManWriteActivity" />
+        <activity android:name=".GreatManReadItemActivity" />
+        <activity android:name=".GreatManModifyActivity" />
     </application>
 
 </manifest>

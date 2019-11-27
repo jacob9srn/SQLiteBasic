@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 public class MainActivity extends AppCompatActivity {
 
     private Button main_btn_first;
+    private Button main_btn_great;
+
 
     private ImageView imageView;
 
@@ -32,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
               Intent intent = new Intent(getApplicationContext() , MemoActivity.class );
               startActivity(intent);
 
+            }
+        });
+
+        main_btn_great = (Button) findViewById(R.id.main_btn_greatMan);
+        main_btn_great.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext() , GreatManActivity.class);
+                startActivity(intent);
             }
         });
 

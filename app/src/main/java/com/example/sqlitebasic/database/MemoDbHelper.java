@@ -1,9 +1,8 @@
-package com.example.sqlitebasic;
+package com.example.sqlitebasic.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.nfc.Tag;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -21,13 +20,13 @@ public class MemoDbHelper extends SQLiteOpenHelper {
             BaseColumns._ID +        " INTEGER PRIMARY KEY " +   ", " + // _ID = (_id) 자세히 보면 보여
             Contract.MemoEntry.COLUMN_NAME_TITLE +      " TEXT "             +   ", " +
             Contract.MemoEntry.COLUMN_NAME_CONTENTS +     " TEXT "            + ", "+
-            Contract.MemoEntry.COLUMN_NAME_IMAGE +         " TEXT " +
+            Contract.MemoEntry.COLUMN_NAME_IMAGE +         " BLOB " +
             ");" ;
 
 //
 
 
-    public void insert(String title , String content, String image){ // 이미지 어떻게 넣지
+    public void insert(String title , String content, byte[] image){ // 이미지 어떻게 넣지
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("INSERT INTO "+Contract.MemoEntry.TABLE_NAME+" ("+Contract.MemoEntry.COLUMN_NAME_TITLE+", "+Contract.MemoEntry.COLUMN_NAME_CONTENTS+
                 ") VALUES ('" +title+"', '"+content+"', '"+image+"');");

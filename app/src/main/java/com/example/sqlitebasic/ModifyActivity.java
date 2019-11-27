@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
+import com.example.sqlitebasic.database.Contract;
+import com.example.sqlitebasic.database.MemoDbHelper;
 
 public class ModifyActivity extends AppCompatActivity {
 
@@ -166,7 +168,6 @@ public class ModifyActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
 

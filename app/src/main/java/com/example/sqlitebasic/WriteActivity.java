@@ -1,14 +1,12 @@
 package com.example.sqlitebasic;
 
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,13 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.sql.Blob;
-import java.util.ArrayList;
+
+import com.example.sqlitebasic.database.Contract;
+import com.example.sqlitebasic.database.MemoDbHelper;
 
 public class WriteActivity extends AppCompatActivity {
 
@@ -94,6 +90,7 @@ public class WriteActivity extends AppCompatActivity {
 
 
 
+
                     btn_save.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
@@ -114,20 +111,23 @@ public class WriteActivity extends AppCompatActivity {
                                                         String contents = mContentsEditText.getText().toString();
                                                             // 비트맵 이미지를 바이트 타입으로 저장. SQLite가 이미지를 이런식으로 저장하기 때문.
                                                         ContentValues contentValues = new ContentValues();  // DB에 정보를 넘겨주는 것.
-                                                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                                        if(bitImg==null){
 
-                                                        }else{
+                                                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                                                         if(bitImg==null){
+
+                                                         }else{
                                                             bitImg.compress(Bitmap.CompressFormat.PNG,100,stream);
                                                             byte[] data = stream.toByteArray();
 
 
                                                             contentValues.put(Contract.MemoEntry.COLUMN_NAME_IMAGE, data);
+                                                            //Log.d("글쓰기액티비티","어떻게 저장되나 이미지가.");
                                                         }
 
                                                         contentValues.put(Contract.MemoEntry.COLUMN_NAME_TITLE, title);
                                                         contentValues.put(Contract.MemoEntry.COLUMN_NAME_CONTENTS, contents);
-                                                        contentValues.put(Contract.MemoEntry.COLUMN_NAME_IMAGE, title);// 이미지 어떻게 넣지.
+                                                        //contentValues.put(Contract.MemoEntry.COLUMN_NAME_IMAGE, title);// 이미지 어떻게 넣지.
                                                         SQLiteDatabase db = MemoDbHelper.getInstance(WriteActivity.super.getApplicationContext()).getWritableDatabase(); // DB에 삽입하기 전에 객체를 먼저 얻어 놓는다.
 
                                                         long newRowId = db.insert(Contract.MemoEntry.TABLE_NAME, null, contentValues); // 위에서 설정한 contentValues를 이용한다.

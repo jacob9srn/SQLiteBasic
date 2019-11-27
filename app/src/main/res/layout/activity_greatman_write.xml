@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+        <ScrollView
+            android:id="@+id/scrollView3"
+            android:layout_width="match_parent"
+            android:layout_height="259dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/white_edge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollView2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/modify_item_great_mot"
+                    android:layout_width="match_parent"
+                    android:layout_height="1000dp"
+
+                    android:hint="명언"></EditText>
+            </LinearLayout>
+        </ScrollView>
+
+
+        <EditText
+            android:id="@+id/modify_item_great_nationality"
+            android:layout_width="237dp"
+
+
+            android:layout_height="41dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:hint="국적"
+            app:layout_constraintStart_toEndOf="@+id/modify_item_great_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/modify_item_great_birthYear"></EditText>
+
+        <ImageView
+            android:id="@+id/modify_item_great_imageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="64dp"
+            android:src="@mipmap/ic_launcher"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <EditText
+            android:id="@+id/modify_itemlist_great_name"
+            android:layout_width="237dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
+            android:hint="이름"
+            app:layout_constraintStart_toEndOf="@+id/modify_item_great_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/modify_btn_great_save"></EditText>
+
+
+        <EditText
+            android:id="@+id/modify_item_great_birthYear"
+            android:layout_width="237dp"
+
+            android:layout_height="41dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:hint="생몰연도"
+            app:layout_constraintStart_toEndOf="@+id/modify_item_great_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/modify_itemlist_great_name"></EditText>
+
+        <TextView
+            android:id="@+id/tv_great_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="6"
+            android:hint="위인 등록하기"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></TextView>
+
+
+        <Button
+            android:id="@+id/modify_btn_great_save"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="2"
+            android:text="저장"
+            app:layout_constraintEnd_toStartOf="@+id/modify_btn_great_cancel"
+            app:layout_constraintTop_toBottomOf="@+id/tv_great_title"></Button>
+
+        <Button
+            android:id="@+id/modify_btn_great_cancel"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="2"
+            android:text="취소"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_great_title"></Button>
+
+
+        <Button
+            android:id="@+id/modify_btn_great_photoRegister"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="16dp"
+            android:text="사진 등록"
+            app:layout_constraintEnd_toStartOf="@+id/modify_item_great_nationality"
+            app:layout_constraintTop_toBottomOf="@+id/modify_item_great_imageView" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="410dp"
+            android:layout_height="190dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/white_edge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modify_item_great_nationality">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/modify_item_great_content"
+                    android:layout_width="425dp"
+                    android:layout_height="1000dp"
+
+                    android:hint="내용"></EditText>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="내용"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="명언"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+            app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

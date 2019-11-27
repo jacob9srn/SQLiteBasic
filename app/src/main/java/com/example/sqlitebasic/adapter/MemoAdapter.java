@@ -1,20 +1,21 @@
-package com.example.sqlitebasic;
+package com.example.sqlitebasic.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import com.example.sqlitebasic.R;
+import com.example.sqlitebasic.database.MemoDbHelper;
 
 public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHolder> {
 
@@ -49,44 +50,14 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHold
         MemoData item = arrayList.get(position); // arrayList
         holder.item_title.setText(item.getItem_title());
         holder.item_contents.setText((item.getItem_contens()));// setText가 안먹혔다 어떻게 해결했냐면 MemoData 안에 들어있는 변수명을 똑같이 바꿔주니까 됐다. 그전에는 et_title 이렇게했다.
-
+        if( null !=item.getItem_image()) {
+            holder.item_iv.setImageBitmap(BitmapFactory.decodeByteArray(item.getItem_image(), 0, item.getItem_image().length));
+        }else{
+            holder.item_iv.setImageResource(R.drawable.ic_more_horiz_black_24dp);
+        }
         holder.itemView.setTag(position); // ?
-
         Log.i(TAG,"==holder.itemView.setTag(position) of next ==  position : " + position+"what is holder.itemView.setTag(position)?");
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) { // 길게 누르면 삭제하도록  이게 되는 이유를 모른다. 지금 내가 홀더와 어뎁트 그리고 xml 이 어떻게 상호작용하는지 모른다.
-
-                Log.i(TAG,"==remove(holder.getAdapterPosition) =="+holder.getAdapterPosition());
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context); //이렇게 해도되나? 무슨 문제가 발생하지?
-                builder.setTitle("삭제 하시겠습니까?");
-
-                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        remove(holder.getAdapterPosition());
-
-                    }
-                });
-                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.show();
-                return true; // 이건뭐야
-            }
-        });
-
-
         Log.i(TAG,"==end onBindViewHolder==");
-
-
-
     }
 
         public void remove(int position){
@@ -120,6 +91,7 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHold
     public class CustomViewHolder extends RecyclerView.ViewHolder{ // 내부클래스 이게 첫번째 같은데
         protected TextView item_title;
         protected TextView item_contents;
+        protected ImageView item_iv;
         public CustomViewHolder(@NonNull View itemView) {
 
             super(itemView);
@@ -127,6 +99,8 @@ public class MemoAdapter extends RecyclerView.Adapter<MemoAdapter.CustomViewHold
 
             this.item_title = (TextView)itemView.findViewById(R.id.item_title);
             this.item_contents = (TextView) itemView.findViewById(R.id.item_contents);
+            this.item_iv = (ImageView) itemView.findViewById(R.id.item_list_iv);
+
 
            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
